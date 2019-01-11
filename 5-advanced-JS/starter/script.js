@@ -90,3 +90,20 @@ teacherQuestion('john') // here is where the fuction its called
 
 // if you whant to called directly you must do
 interviewQuestion('teacher')('Velez')
+
+// Lecture: IIFE
+
+function game () {
+  var score = Math.random() * 10
+  console.log(score >= 5)
+}
+
+game();
+
+// Using IIFE WARNING! This way you can't reuse the function
+
+( function() {
+    var score = Math.random() * 10
+    console.log(score >= 5)
+  }
+)()
