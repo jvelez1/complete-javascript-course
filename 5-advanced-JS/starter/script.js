@@ -37,7 +37,7 @@ var velez = Object.create(personProto)
 console.log(velez)
 
 // Lecture: Passing functions as arguments
-
+/*
 var years = [1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997]
 
 function arrayCalc (arr, fn) {
@@ -66,10 +66,10 @@ console.log(arrayCalc(years, calculateAge))
 console.log(arrayCalc(years, isFullAge))
 
 console.log(arrayCalc(arrayCalc(years, calculateAge), maxHeartRate))
-
+*/
 // Lecture: functions returning functions
 
-function interviewQuestion (job) {
+/* function interviewQuestion (job) {
   if (job === 'designer') {
     return function (name) {
       console.log(name + ', can you plase explain what UX design is?')
@@ -83,7 +83,7 @@ function interviewQuestion (job) {
       console.log('Hello ' + name + ', what do you do?')
     }
   }
-}
+} */
 
 var teacherQuestion = interviewQuestion('teacher') // this return a function but no it's called yet
 teacherQuestion('john') // here is where the fuction its called
@@ -102,8 +102,98 @@ game();
 
 // Using IIFE WARNING! This way you can't reuse the function
 
-( function() {
-    var score = Math.random() * 10
-    console.log(score >= 5)
+(function () {
+  var score = Math.random() * 10
+  console.log(score >= 5)
+})()
+
+// Closures
+
+function retirement (regiramentAge) {
+  var a = ' Years left until retirement.'
+  return function (yearOfBirth) {
+    var age = 2019 - yearOfBirth
+    console.log((regiramentAge - age) + a)
   }
-)()
+}
+
+var retirementUS = retirement(66)
+retirementUS(1993)
+var retirementGermany = retirement(65)
+var retirementIceland = retirement(67)
+
+retirementUS(1993)
+retirementGermany(1993)
+retirementIceland(1993)
+
+function interviewQuestion (job) {
+  return function (name) {
+    if (job === 'designer') {
+      console.log(name + ', can you plase explain what UX design is?')
+    } else if (job === 'teacher') {
+      console.log('what do you teach, ' + name + '?')
+    } else {
+      console.log('Hello ' + name + ', what do you do?')
+    }
+  }
+}
+
+interviewQuestion('teacher')('Velez')
+
+// ////////////////////////
+// Lecture: Bind, call and apply
+
+var john = {
+  name: 'John',
+  age: 26,
+  job: 'teacher',
+  presentation: function (style, timeOfDate) {
+    if (style === 'formal') {
+      console.log('Good ' + timeOfDate + ' all, I\'m ' +
+                   this.name + ' I\'m a ' + this.job + 'I\'m ' + this.age + ' years old.')
+    } else if (style === 'friendly') {
+      console.log('whats up!? all, I\'m ' + this.name + ' I\'m a ' +
+                   this.job + 'I\'m ' + this.age + 'years old. Have a nice ' + timeOfDate)
+    }
+  }
+}
+
+john.presentation('formal', 'morning')
+
+var emily = {
+  name: 'Emily',
+  age: 35,
+  job: 'Designer'
+}
+
+john.presentation.call(emily, 'friendly', 'afternoon')
+
+var johnFriendly = john.presentation.bind(john, 'friendly')
+johnFriendly('morning')
+johnFriendly('night')
+
+var years = [1990, 1991, 1992, 1993, 1994, 2005, 1996, 2010]
+
+function arrayCalc (arr, fn) {
+  var arrRes = []
+  for (var i = 0; i < arr.length; i++) {
+    arrRes.push(fn(arr[i]))
+  }
+  return arrRes
+}
+
+function calculateAge (el) {
+  return 2016 - el
+}
+
+function isFullAge (limit, el) {
+  return el >= limit
+}
+
+console.log(years)
+var ages = arrayCalc(years, calculateAge)
+var fullJapan = arrayCalc(ages, isFullAge.bind(this, 20))
+
+console.log(ages)
+console.log(fullJapan)
+
